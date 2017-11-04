@@ -7,32 +7,30 @@ public class APIClient : MonoBehaviour
     [HideInInspector] public Modelo3D[] modelos = null;
     private const string baseUrl = "http://localhost:55982/API";
 
-	void Start ()
+    void Start()
     {
-        StartCoroutine("GetItensAPISync");
-	}
+        StartCoroutine("GetModelosAPISync");
+    }
 
-    IEnumerator GetItensAPISync()
+    IEnumerator GetModelosAPISync()
     {
         UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Modelos3D");
 
         yield return request.Send();
 
-        if(request.isNetworkError || request.isHttpError)
+        /*if(request.isNetworkError || request.isHttpError)
         {
             Debug.Log(request.error);
-        }
-        else
+        }*/
+
+        string response = request.downloadHandler.text;
+        Debug.Log(response);
+
+        modelos = JSonHelper.getJsonArray<Modelo3D>(response);
+
+        foreach (Modelo3D i in modelos)
         {
-            string response = request.downloadHandler.text;
-            Debug.Log(response);
-
-            Modelo3D[] modelos = JSonHelper.getJsonArray<Modelo3D>(response);
-
-            foreach (Modelo3D i in modelos)
-            {
-                ImprimirItem(i);
-            }
+            ImprimirItem(i);
         }
     }
 
@@ -45,7 +43,7 @@ public class APIClient : MonoBehaviour
         Debug.Log("Altura: " + i.Altura);
         Debug.Log("Peso: " + i.Peso);
         Debug.Log("Historia: " + i.Historia);
-        Debug.Log("Habilidade: " + i.Habilidade);
-            
+        Debug.Log("Habilidade: " + i.Habilidades);
+
     }
 }

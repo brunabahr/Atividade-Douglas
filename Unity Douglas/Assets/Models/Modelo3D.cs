@@ -7,6 +7,6 @@ public class Modelo3D
     public int Altura;
     public int Peso;
     public string Historia;
-    public string Habilidade;
+    public string Habilidades;
 
 }
